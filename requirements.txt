@@ -1,4 +1,6 @@
 coverage<5.0
+coverage==4.4
+folium==0.2.1
 imgaug==0.2.6
 opencv-python
 Pillow
