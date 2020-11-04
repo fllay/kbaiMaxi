@@ -58,7 +58,7 @@ class CheckpointPB(keras.callbacks.Callback):
         logs = logs or {}
         self.loss.append(logs.get("loss"))
         self.val_loss.append(logs.get("val_loss"))
-        plot(self.loss,self.val_loss,self.filepath,self.date)
+        #plot(self.loss,self.val_loss,self.filepath,self.date)
         self.epochs_since_last_save += 1
         if self.epochs_since_last_save >= self.period:
             self.epochs_since_last_save = 0
