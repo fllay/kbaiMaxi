@@ -139,12 +139,13 @@ def save_tflite(model):
     model.save("weights.h5", include_optimizer=False)
     tf.compat.v1.disable_eager_execution()
     converter = tf.compat.v1.lite.TFLiteConverter.from_keras_model_file("weights.h5",
-                                        output_arrays=['detection_layer_30/BiasAdd'])
+                                        output_arrays=[model.layers[2].name+'/BiasAdd'])
     
 
     tfmodel = converter.convert()
     file = open ("weights.tflite" , "wb")
     file.write(tfmodel)
+    
 
 def _create_callbacks(saved_weights_name):
     # Make a few callbacks
