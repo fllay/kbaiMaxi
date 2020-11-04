@@ -122,11 +122,11 @@ def train(model,
 
     # 4. training
     train_start = time.time()
-    train_date = datetime.now().strftime('%Y-%m-%d')
+    train_date = ""
     name = ""
     for item in saved_weights_name.split('/')[:-1]: name = os.path.join(name,item)
     path = os.path.join(name,train_date)
-    os.mkdir(path)
+    #os.mkdir(path)
     saved_weights_name = os.path.join(path, train_date + '.h5')
     try:
         history = model.fit_generator(generator = train_batch_gen,
