@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
-from tensorflow.keras.models import Model
-from tensorflow.keras.layers import Reshape, Conv2D, Input, Lambda
+from keras.models import Model
+from keras.layers import Reshape, Conv2D, Input, Lambda
 import numpy as np
 import cv2
 import os
@@ -39,11 +39,12 @@ class YoloNetwork(object):
         output_tensor = Reshape((grid_size, grid_size, nb_box, 4 + 1 + nb_classes))(output_tensor)
     
         model = Model(feature_extractor.feature_extractor.input, output_tensor)
-        
         self._norm = feature_extractor.normalize
         self._model = model
         self._model.summary()
         self._init_layer()
+        layer_names = [layer.name for layer in self._model.layers]
+        print(layer_names)
 
     def _init_layer(self):
         layer = self._model.layers[-2]
@@ -57,7 +58,6 @@ class YoloNetwork(object):
 
     def load_weights(self, weight_path, by_name):
         self._model.load_weights(weight_path, by_name=by_name)
-        #self._model.summary()
         
     def forward(self, image):
         def _get_input_size():
