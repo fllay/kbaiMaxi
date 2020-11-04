@@ -68,9 +68,9 @@ class YoloLoss(object):
     
 
 def get_loss(coord_mask, conf_mask, class_mask, pred_tensor, true_box_xy, true_box_wh, true_box_conf, true_box_class):
-    nb_coord_box = tf.reduce_sum(tf.to_float(coord_mask > 0.0))
-    nb_conf_box  = tf.reduce_sum(tf.to_float(conf_mask  > 0.0))
-    nb_class_box = tf.reduce_sum(tf.to_float(class_mask > 0.0))
+    nb_coord_box = tf.reduce_sum(tf.cast(coord_mask > 0.0, tf.float32))
+    nb_conf_box  = tf.reduce_sum(tf.cast(conf_mask  > 0.0, tf.float32))
+    nb_class_box = tf.reduce_sum(tf.cast(class_mask > 0.0, tf.float32))
 
     pred_box_xy, pred_box_wh, pred_box_conf, pred_box_class = pred_tensor[..., :2], pred_tensor[..., 2:4], pred_tensor[..., 4], pred_tensor[..., 5:]
     # true_box_xy, true_box_wh, true_box_conf, true_box_class = true_tensor[..., :2], true_tensor[..., 2:4], true_tensor[..., 4], true_tensor[..., 5]
@@ -169,8 +169,8 @@ class _Activator(object):
 
 
 def create_cell_grid(grid_size, batch_size):
-    x_pos = tf.to_float(tf.range(grid_size))
-    y_pos = tf.to_float(tf.range(grid_size))
+    x_pos = tf.cast(tf.range(grid_size), tf.float32)
+    y_pos = tf.cast(tf.range(grid_size), tf.float32)
     xx, yy = tf.meshgrid(x_pos, y_pos)
     xx = tf.expand_dims(xx, -1)
     yy = tf.expand_dims(yy, -1)
@@ -260,7 +260,7 @@ class _Mask(object):
         best_ious = tf.reduce_max(iou_scores, axis=4)
         # 1) confidence mask (N, 13, 13, 5)
         conf_mask  = tf.zeros(tf.shape(y_true)[:4])
-        conf_mask = conf_mask + tf.to_float(best_ious < 0.6) * (1 - y_true[..., 4]) * self._no_object_scale
+        conf_mask = conf_mask + tf.cast(best_ious < 0.6, tf.float32) * (1 - y_true[..., 4]) * self._no_object_scale
         
         # penalize the confidence of the boxes, which are reponsible for corresponding ground truth box
         conf_mask = conf_mask + y_true[..., 4] * self._object_scale

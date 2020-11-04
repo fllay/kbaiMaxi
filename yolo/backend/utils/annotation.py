@@ -29,6 +29,7 @@ def get_train_annotations(labels,
         ann_folder : str
         valid_img_folder : str
         valid_ann_folder : str
+
     # Returns
         train_anns : Annotations instance
         valid_anns : Annotations instance
@@ -262,5 +263,4 @@ class Annotations(object):
 
     def __getitem__(self, idx):
         return self._components[idx]
-
 
